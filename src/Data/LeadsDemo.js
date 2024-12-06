@@ -1,0 +1,38 @@
+export const leads = [
+  {
+    customerName: "John Doe",
+    date: "2024-12-03",
+    time: "10:30 AM",
+    image: "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg",
+    phoneNumber: "+1-123-456-7890",
+    packageName: "New York Adventure",
+    companyName: "Travel Masters",
+  },
+  {
+    customerName: "Jane Smith",
+    date: "2024-12-04",
+    time: "3:15 PM",
+    image: "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg",
+    phoneNumber: "+44-789-123-4567",
+    packageName: "England Highlights",
+    companyName: "Global Tours",
+  },
+  {
+    customerName: "Michael Johnson",
+    date: "2024-12-05",
+    time: "11:00 AM",
+    image: "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg",
+    phoneNumber: "+1-987-654-3210",
+    packageName: "New York Luxury Getaway",
+    companyName: "Elite Travel Co.",
+  },
+  {
+    customerName: "Emily Davis",
+    date: "2024-12-06",
+    time: "2:45 PM",
+    image: "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg",
+    phoneNumber: "+44-123-456-7890",
+    packageName: "England Royal Experience",
+    companyName: "Royal Vacations",
+  },
+];
