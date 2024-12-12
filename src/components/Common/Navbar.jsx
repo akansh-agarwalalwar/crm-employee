@@ -9,6 +9,7 @@ import { HiMenuAlt3 } from "react-icons/hi";
 import { MdNotificationsNone } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
 import user from "../../assets/user.png";
+import { CiMenuBurger } from "react-icons/ci";
 const data = [
   {
     title: "team inbox",
@@ -34,52 +35,36 @@ const data = [
 
 function Navbar() {
   const location = useLocation();
-
   return (
-    <nav className="h-[90px] w-full flex justify-between items-center text-gray-400 bg-white p-5">
-      <Link to="/">
-        <img src={logo} alt="logo" className="w-[80px]  h-[80px]" />
-      </Link>
-      <ul className="flex justify-between items-center h-full border-r-[3px] px-4">
+    <nav className="h-[70px] w-full flex justify-between items-center text-white bg-gray-900 p-2">
+      <div className="text-2xl ml-5 cursor-pointer">
+        <CiMenuBurger />
+      </div>
+      <ul className="flex justify-between items-center h-full px-4">
         {data.map((item, index) => {
-          const isActive = location.pathname === item.link; // Check if the current path matches the item's link
+          const isActive = location.pathname === item.link;
           return (
             <li key={index} className="flex items-center mx-4 justify-center ">
               <Link
                 to={item.link}
                 className={`flex items-center mx-4 gap-4 font-semibold justify-center capitalize ${
-                  isActive ? "text-[#00BBFF]" : "text-[#888888]"
+                  isActive ? "text-[#00BBFF]" : "text-white"
                 }`}
               >
-                <item.icon className="text-[24px]" />
+                <item.icon className="text-[20px]" />
                 {item.title}
               </Link>
             </li>
           );
         })}
-        <HiMenuAlt3 className="text-[24px] text-gray-500 cursor-pointer" />
+        {/* <HiMenuAlt3 className="text-xs text-white cursor-pointer" /> */}
       </ul>
-      <div className="flex items-center justify-center gap-5">
-        <MdNotificationsNone className="text-[32px] text-gray-500 cursor-pointer" />
-
-        <div className="text-start font-semibold">
-          <h3>Connected</h3>
-          <h2 className="text-[#00BBFF]">+91-9817761746</h2>
-          <h2 className="text-[#FFC20E] flex gap-2 items-center">
-            <GoDotFill />
-            Take a Break
-          </h2>
+      <div className="flex items-center justify-start gap-5">
+        <MdNotificationsNone className="text-xl text-gray-500 cursor-pointer" />
+        <div className="text-start font-semibold w-full flex flex-row gap-10 items-center justify-center">
+          <h3 className="text-xs">Connected</h3>
+          <h2 className="text-[#00BBFF] text-sm">+91-9817761746</h2>
         </div>
-      </div>
-      <div className="flex items-center gap-4">
-        <div className=" relative">
-          <img src={user} alt="profilePic" className="w-[40px] h-[40px]" />
-          <GoDotFill className=" absolute bottom-0 -right-1 text-[#60D669]" />
-        </div>
-        <h1 className="flex text-[#00BBFF] flex-col">
-          Vaibhav Agarwal
-          <span className="text-xs text-gray-400">ID:123123213</span>
-        </h1>
       </div>
     </nav>
   );
