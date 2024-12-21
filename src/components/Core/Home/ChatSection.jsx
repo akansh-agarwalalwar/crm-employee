@@ -1,101 +1,223 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import { BsSend, BsPaperclip } from "react-icons/bs";
+import { MdDelete } from "react-icons/md";
 
-function ChatSection() {
-  const [messages, setMessages] = useState([
-    {
-      text: "Hello! How can I help you today?",
-      type: "incoming",
-      time: "10:30 AM",
-    },
-    {
-      text: "I need some information about your services.",
-      type: "outgoing",
-      time: "10:32 AM",
-    },
-    {
-      text: "Sure! Please let me know what you need.",
-      type: "incoming",
-      time: "10:33 AM",
-    },
-  ]);
-
+function ChatSection({ selectedChat }) {
+  const [chats, setChats] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const chatEndRef = useRef(null);
+
+  useEffect(() => {
+    let interval;
+
+    if (selectedChat.phoneNumber) {
+      const fetchChatHistory = () => {
+        axios
+          .get(
+            `http://localhost:4000/api/whatsapp/history/${selectedChat.phoneNumber}`
+          )
+          .then((response) => {
+            setChats(response.data.chats || []);
+            scrollToBottom();
+          })
+          .catch((error) => {
+            console.error("Error fetching WhatsApp chat history:", error);
+          });
+      };
+      fetchChatHistory();
+      interval = setInterval(fetchChatHistory, 10000);
+    }
+    return () => {
+      clearInterval(interval);
+    };
+  }, [selectedChat]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [chats]);
 
   const handleSendMessage = () => {
-    if (newMessage.trim()) {
-      const currentTime = new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-      setMessages([
-        ...messages,
-        { text: newMessage, type: "outgoing", time: currentTime },
-      ]);
-      setNewMessage("");
+    if (newMessage.trim() !== "" && selectedChat.phoneNumber) {
+      axios
+        .post("http://localhost:4000/api/whatsapp/send", {
+          to: selectedChat.phoneNumber,
+          message: newMessage,
+          phoneNumberId: selectedChat.phoneNumberId,
+        })
+        .then(() => {
+          setChats((prevChats) => [
+            ...prevChats,
+            {
+              id: Date.now(),
+              from: "me",
+              message: newMessage,
+              createdAt: new Date().toISOString(),
+            },
+          ]);
+          setNewMessage("");
+          scrollToBottom();
+        })
+        .catch((error) => {
+          console.error("Error sending WhatsApp message:", error);
+        });
+    }
+
+    if (selectedFile && selectedChat.phoneNumber) {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      formData.append("to", selectedChat.phoneNumber);
+      formData.append("phoneNumberId", selectedChat.phoneNumberId);
+
+      axios
+        .post("http://localhost:4000/api/whatsapp/send-file", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then(() => {
+          setChats((prevChats) => [
+            ...prevChats,
+            {
+              id: Date.now(),
+              from: "me",
+              message: `Sent a file: ${selectedFile.name}`,
+              createdAt: new Date().toISOString(),
+            },
+          ]);
+          setSelectedFile(null);
+          scrollToBottom();
+        })
+        .catch((error) => {
+          console.error("Error sending file:", error);
+        });
     }
   };
 
+  const handleDeleteFile = () => {
+    setSelectedFile(null);
+  };
+
+  const scrollToBottom = () => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const formatDateGroup = (date) => {
+    const today = new Date();
+    const messageDate = new Date(date);
+
+    const isToday = today.toDateString() === messageDate.toDateString();
+    const isYesterday =
+      new Date(today.setDate(today.getDate() - 1)).toDateString() ===
+      messageDate.toDateString();
+
+    if (isToday) return "Today";
+    if (isYesterday) return "Yesterday";
+    return messageDate.toLocaleDateString();
+  };
+
+  const groupedChats = chats.reduce((groups, chat) => {
+    const group = formatDateGroup(chat.createdAt);
+    if (!groups[group]) {
+      groups[group] = [];
+    }
+    groups[group].push(chat);
+    return groups;
+  }, {});
+
   return (
-    <div className="flex flex-col w-[60%] h-[90%] bg-[#EEF5FF] relative border-l border-gray-300">
-      {/* Chat Header */}
-      <div className="flex items-center justify-between bg-[#075E54] text-white px-4 py-3 shadow-md">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-full bg-gray-200"></div>
-          <div>
-            <h3 className="text-lg font-semibold">John Doe</h3>
-            <p className="text-sm">Online</p>
-          </div>
-        </div>
-        <div className="flex space-x-4">
-          <button className="text-xl">&#x260E;</button>
-          <button className="text-xl">&#128247;</button>
-          <button className="text-xl">&#8942;</button>
-        </div>
+    <div className="flex flex-col w-[60%] bg-[#EEF5FF] relative border-l border-gray-300">
+      <div className="flex items-center w-full justify-center bg-[#075E54] text-white px-4 py-3 shadow-md">
+        <h3 className="text-lg font-semibold text-center">
+          {selectedChat.phoneNumber || "Select a chat"}
+        </h3>
       </div>
 
-      {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`flex items-start space-x-2 ${
-              message.type === "outgoing" ? "justify-end" : ""
-            }`}
-          >
-            {message.type === "incoming" && (
-              <div className="w-8 h-8 rounded-full bg-gray-300"></div>
-            )}
-            <div
-              className={`${
-                message.type === "outgoing" ? "bg-[#DCF8C6]" : "bg-white"
-              } rounded-lg p-3 max-w-[70%] shadow-sm`}
-            >
-              <p>{message.text}</p>
-              <span className="text-xs text-gray-400 block text-right">
-                {message.time}
-              </span>
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-hide">
+        {Object.entries(groupedChats).map(([date, chats]) => (
+          <div key={date}>
+            <div className=" text-gray-500 my-2 w-full justify-center p-1 flex items-center">
+              <div className="w-auto p-2 bg-white text-center rounded-md">
+                {date}
+              </div>
             </div>
+            {chats.map((chat, index) => (
+              <div
+                key={index}
+                className={`flex ${
+                  chat.empId === "server" || chat.to
+                    ? "justify-end"
+                    : "justify-start"
+                }`}
+              >
+                <div
+                  className={`p-3 rounded-lg shadow-sm mb-2 ${
+                    chat.empId === "server" || chat.to
+                      ? "bg-[#DCF8C6]"
+                      : "bg-white"
+                  }`}
+                >
+                  <p>{chat.to || chat.from}</p>
+                  <p className="text-xs text-gray-400 text-right">
+                    {new Date(chat.createdAt).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         ))}
+        <div ref={chatEndRef} />
       </div>
 
-      {/* Chat Input */}
-      <div className="bg-white -mt-40 px-4 py-2 border-t border-gray-300 flex items-center">
-        <button className="text-xl text-gray-500 pr-2">&#128512;</button>
+      <div className="bg-white px-4 py-2 border-t border-gray-300 flex items-center">
         <input
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          className="flex-1 border-none focus:ring-0 focus:outline-none px-2 text-sm"
+          className="flex-1 px-3 py-2 rounded-lg border border-gray-300"
           placeholder="Type a message"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleSendMessage();
+            }
+          }}
         />
+        <label className="ml-3 cursor-pointer">
+          <BsPaperclip size={20} />
+          <input
+            type="file"
+            onChange={(e) => setSelectedFile(e.target.files[0])}
+            className="hidden"
+          />
+        </label>
         <button
           onClick={handleSendMessage}
-          className="text-lg text-[#075E54] pl-3 font-medium"
+          className="ml-3 px-4 py-2 bg-blue-500 text-white rounded-lg"
         >
-          Send
+          <BsSend size={16} />
         </button>
       </div>
+      {selectedFile && (
+        <div className="bg-white px-4 py-2 border-t border-gray-300 flex items-center">
+          <p className="flex-1">{selectedFile.name}</p>
+          <button
+            onClick={handleSendMessage}
+            className="ml-3 px-4 py-2 bg-blue-500 text-white rounded-lg"
+          >
+            Send File
+          </button>
+          <button
+            onClick={handleDeleteFile}
+            className="ml-3 px-4 py-2 bg-red-500 text-white rounded-lg"
+          >
+            <MdDelete size={16} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

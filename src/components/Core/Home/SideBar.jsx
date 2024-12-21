@@ -1,66 +1,63 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { BiSearch } from "react-icons/bi";
-import { FiFilter } from "react-icons/fi";
-import { MdArrowDropDown, MdEdit } from "react-icons/md";
-import { leads } from "../../../Data/LeadsDemo";
-import { GoDotFill } from "react-icons/go";
+import { MdArrowDropDown } from "react-icons/md";
 
-function SideBar() {
+function Sidebar({ setSelectedChat }) {
+  const [phoneNumbers, setPhoneNumbers] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/api/whatsapp/getChats")
+      .then((response) => {
+        setPhoneNumbers(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching phone numbers:", error);
+      });
+  }, []);
+
   return (
-    <div className="w-[20%] flex flex-col items-center  bg-white h-full">
-      <div className=" w-full flex items-center flex-col gap-3 p-4">
-        <div className="flex gap-4 items-center">
-          <button className="bg-[#0D92F4] w-[200px] rounded-xl flex p-4 text-white items-center gap-3">
-            New Message
-            <MdEdit />
-          </button>
-          <button className="bg-gray-200 text-gray-700 p-2 rounded-lg">
-            <BiSearch fontSize={28} />
-          </button>
-        </div>
-        <div className="flex gap-4 items-center">
-          <button className="bg-[#0d94f420] w-[200px] rounded-xl flex p-4 text-gray-500 items-center justify-between gap-3">
-            New{" "}
-            <span className="px-2 text-center bg-red-500 text-white rounded-full ">
-              1
-            </span>
-            <MdArrowDropDown fontSize={24} />
-          </button>
-          <button className=" text-gray-700 p-2 rounded-lg">
-            <FiFilter fontSize={28} />
-          </button>
+    <div className="w-[14%] flex flex-col bg-white border-r border-gray-200">
+      <div className="p-2 border-gray-200">
+        <div className="flex items-center rounded-lg px-4 py-2 border-2">
+          <BiSearch className="text-gray-500" fontSize={20} />
+          <input
+            type="text"
+            placeholder="Search chats"
+            className="ml-2 w-full bg-transparent focus:outline-none text-sm text-gray-600"
+          />
         </div>
       </div>
-
-      <hr className="w-full border-gray-200 border-2 mx-2 my-4" />
-      <div>
-        {leads.map((item, index) => (
+      <div className="p-2">
+        <div className="w-full bg-white border rounded-lg shadow-sm p-3">
+          <select className="w-full text-sm text-gray-600 cursor-pointer">
+            <option value="all">All Chats</option>
+            <option value="unread">Unread</option>
+            <option value="open">Open</option>
+            <option value="blocked">Blocked</option>
+          </select>
+        </div>
+      </div>
+      <hr className="border-gray-200" />
+      <div className="flex-1 overflow-y-auto">
+        {phoneNumbers.map((item, index) => (
           <div
             key={index}
-            className="w-full flex items-center text-start justify-between gap-3 p-4"
+            onClick={() =>
+              setSelectedChat({
+                phoneNumber: item.phoneNumber,
+                phoneNumberId: item.phoneNumberId,
+              })
+            }
+            className="flex items-center gap-3 p-4 cursor-pointer hover:bg-gray-200 transition"
           >
-            <div className=" relative">
-              <img
-                src={item.image}
-                alt="profilePic"
-                className="w-[40px] rounded-full h-[40px]"
-              />
-              <GoDotFill className=" absolute bottom-0 -right-1 text-[#60D669]" />
+            <div className="bg-blue-500 text-white w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold">
+              {/* {item.phoneNumber[0]?.toUpperCase()} */}C
             </div>
-            <div>
-              <h2 className="text-[#808080] font-bold text-[18px]">
-                {item.companyName}
-              </h2>
-              <p className="text-[#666666] text-[12px]">
-                {item.date}
-                {"  "}
-                {item.time}
-              </p>
-              <p className="text-[#666666] font-medium text-[12px]">hello</p>
+            <div className="flex-1">
+              <h2 className="text-gray-800 font-medium">{item.phoneNumber}</h2>
             </div>
-            <button className=" rounded-lg bg-gray-100 p-2 text-blue-300">
-              Open
-            </button>
           </div>
         ))}
       </div>
@@ -68,4 +65,4 @@ function SideBar() {
   );
 }
 
-export default SideBar;
+export default Sidebar;

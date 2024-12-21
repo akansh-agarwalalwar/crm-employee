@@ -6,11 +6,11 @@ import Sidebar from "../components/Common/Sidebar";
 function Dashboard() {
   return (
     <div className="w-full flex h-screen">
-      <div className="flex flex-col w-full">
+      <Sidebar />
+      <div className="flex flex-col w-full h-screen">
         <Navbar />
-        <Sidebar />
+        <Outlet />
       </div>
-      <Outlet />
     </div>
   );
 }

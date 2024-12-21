@@ -11,24 +11,24 @@ import { GoDotFill } from "react-icons/go";
 import user from "../../assets/user.png";
 import { CiMenuBurger } from "react-icons/ci";
 const data = [
-  {
-    title: "team inbox",
-    icon: RiInboxArchiveFill,
-    link: "/",
-  },
+  // {
+  //   title: "team inbox",
+  //   icon: RiInboxArchiveFill,
+  //   link: "/",
+  // },
   {
     title: "contacts",
-    icon: LuRadioTower,
+    // icon: LuRadioTower,
     link: "/contacts",
   },
   {
     title: "invoice",
-    icon: RiContactsBookFill,
+    // icon: RiContactsBookFill,
     link: "/calendar",
   },
   {
     title: "itinerary",
-    icon: TbSettingsUp,
+    // icon: TbSettingsUp,
     link: "/itinerary",
   },
 ];
@@ -36,10 +36,10 @@ const data = [
 function Navbar() {
   const location = useLocation();
   return (
-    <nav className="h-[70px] w-full flex justify-between items-center text-white bg-gray-900 p-2">
-      <div className="text-2xl ml-5 cursor-pointer">
+    <nav className="h-[10vh] w-full flex justify-between items-center text-white bg-gray-900 p-2">
+      {/* <div className="text-2xl ml-5 cursor-pointer">
         <CiMenuBurger />
-      </div>
+      </div> */}
       <ul className="flex justify-between items-center h-full px-4">
         {data.map((item, index) => {
           const isActive = location.pathname === item.link;
@@ -51,7 +51,7 @@ function Navbar() {
                   isActive ? "text-[#00BBFF]" : "text-white"
                 }`}
               >
-                <item.icon className="text-[20px]" />
+                {/* <item.icon className="text-[20px]" /> */}
                 {item.title}
               </Link>
             </li>

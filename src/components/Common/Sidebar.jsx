@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "../../assets/Logo.png";
 import { Link } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";
 import { FaUserTie } from "react-icons/fa";
@@ -7,6 +6,7 @@ import { FaComments } from "react-icons/fa";
 import { FaChartLine } from "react-icons/fa";
 import { FaCogs } from "react-icons/fa";
 import { FaBroadcastTower } from "react-icons/fa";
+import { CiMenuBurger } from "react-icons/ci";
 
 const menuItems = [
   { title: "Dashboard", icon: MdDashboard, link: "/" },
@@ -20,6 +20,9 @@ const menuItems = [
 function Sidebar() {
   return (
     <div className="h-screen w-[80px] bg-gray-900 text-white flex flex-col items-center py-5">
+      <div className="text-2xl cursor-pointer mb-14">
+        <CiMenuBurger />
+      </div>
       {menuItems.map((item, index) => (
         <Link
           key={index}
