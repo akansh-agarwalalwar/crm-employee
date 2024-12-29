@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { BiSearch } from "react-icons/bi";
 import { MdArrowDropDown } from "react-icons/md";
-
+import profile from "../../../assets/profile.svg";
+import { useNavigate } from "react-router-dom";
 function Sidebar({ setSelectedChat }) {
   const [phoneNumbers, setPhoneNumbers] = useState([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     axios
       .get("http://localhost:4000/api/whatsapp/getChats")
@@ -17,6 +18,7 @@ function Sidebar({ setSelectedChat }) {
       });
   }, []);
 
+  
   return (
     <div className="w-[14%] flex flex-col bg-white border-r border-gray-200">
       <div className="p-2 border-gray-200">

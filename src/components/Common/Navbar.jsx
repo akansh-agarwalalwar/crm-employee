@@ -1,34 +1,18 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import logo from "../../assets/Logo.png";
-import { RiInboxArchiveFill } from "react-icons/ri";
-import { LuRadioTower } from "react-icons/lu";
-import { RiContactsBookFill } from "react-icons/ri";
-import { TbSettingsUp } from "react-icons/tb";
-import { HiMenuAlt3 } from "react-icons/hi";
 import { MdNotificationsNone } from "react-icons/md";
-import { GoDotFill } from "react-icons/go";
-import user from "../../assets/user.png";
-import { CiMenuBurger } from "react-icons/ci";
 const data = [
-  // {
-  //   title: "team inbox",
-  //   icon: RiInboxArchiveFill,
-  //   link: "/",
-  // },
+
   {
     title: "contacts",
-    // icon: LuRadioTower,
     link: "/contacts",
   },
   {
     title: "invoice",
-    // icon: RiContactsBookFill,
-    link: "/calendar",
+    link: "/invoice",
   },
   {
     title: "itinerary",
-    // icon: TbSettingsUp,
     link: "/itinerary",
   },
 ];
@@ -37,9 +21,7 @@ function Navbar() {
   const location = useLocation();
   return (
     <nav className="h-[10vh] w-full flex justify-between items-center text-white bg-gray-900 p-2">
-      {/* <div className="text-2xl ml-5 cursor-pointer">
-        <CiMenuBurger />
-      </div> */}
+      <div></div>
       <ul className="flex justify-between items-center h-full px-4">
         {data.map((item, index) => {
           const isActive = location.pathname === item.link;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";
 import { FaUserTie } from "react-icons/fa";
 import { FaComments } from "react-icons/fa";
@@ -7,21 +7,28 @@ import { FaChartLine } from "react-icons/fa";
 import { FaCogs } from "react-icons/fa";
 import { FaBroadcastTower } from "react-icons/fa";
 import { CiMenuBurger } from "react-icons/ci";
+import Profile from "../../assets/profile.png";
 
 const menuItems = [
   { title: "Dashboard", icon: MdDashboard, link: "/" },
-  { title: "Employee", icon: FaUserTie, link: "employee" },
   { title: "Chats", icon: FaComments, link: "chats" },
-  { title: "Leads", icon: FaChartLine, link: "/" },
-  { title: "Automation", icon: FaCogs, link: "/" },
-  { title: "Broadcast", icon: FaBroadcastTower, link: "/" },
+  { title: "Leads", icon: FaChartLine, link: "leads" },
+  { title: "Automation", icon: FaCogs, link: "automation" },
+  { title: "Broadcast", icon: FaBroadcastTower, link: "broadcast" },
 ];
 
 function Sidebar() {
+  const navigation = useNavigate();
+  const profileClick = () => {
+    navigation("/profile");
+  };
   return (
     <div className="h-screen w-[80px] bg-gray-900 text-white flex flex-col items-center py-5">
       <div className="text-2xl cursor-pointer mb-14">
         <CiMenuBurger />
+      </div>
+      <div onClick={profileClick} className="mb-14 cursor-pointer">
+        <img src={Profile} alt="profile" className="w-12 h-12 rounded-full" />
       </div>
       {menuItems.map((item, index) => (
         <Link
