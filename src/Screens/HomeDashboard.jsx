@@ -3,29 +3,9 @@ import { FaFileInvoice } from "react-icons/fa";
 import { FaClock } from "react-icons/fa6";
 import { TiTick } from "react-icons/ti";
 import { RxCross2 } from "react-icons/rx";
-import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { FaEye } from "react-icons/fa";
 import { FaDownload } from "react-icons/fa6";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
 
 function HomeDashboard() {
   const menuitems = [
@@ -59,36 +39,15 @@ function HomeDashboard() {
     },
   ];
 
-  const data = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
-    datasets: [
-      {
-        label: "Leads",
-        data: [65, 59, 80, 81, 56, 55, 40],
-        fill: true,
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        tension: 0.4,
-        pointBackgroundColor: "rgba(75, 192, 192, 1)",
-        pointBorderColor: "#fff",
-        pointHoverBackgroundColor: "#fff",
-        pointHoverBorderColor: "rgba(75, 192, 192, 1)",
-      },
-    ],
-  };
-
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        // position: 'top',
-      },
-      title: {
-        // display: true,
-        // text: 'Leads Overview (Last 7 Months)',
-      },
-    },
-  };
+  const data = [
+    { name: "January", Leads: 65 },
+    { name: "February", Leads: 59 },
+    { name: "March", Leads: 80 },
+    { name: "April", Leads: 81 },
+    { name: "May", Leads: 56 },
+    { name: "June", Leads: 55 },
+    { name: "July", Leads: 40 },
+  ];
 
   const recentLeads = [
     {
@@ -149,7 +108,16 @@ function HomeDashboard() {
       <div className="flex gap-4 justify-between mt-4">
         <div className="bg-white p-4 rounded-md flex flex-col gap-4 w-2/3 border-2 border-[#E5E7EB]">
           <h1 className="font-semibold">Leads Overview</h1>
-          <Line data={data} options={options} />
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="Leads" stroke="#8884d8" activeDot={{ r: 8 }} />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
         <div className="bg-white p-4 rounded-md flex flex-col gap-4 w-1/3 border-2 border-[#E5E7EB]">
           <h1 className="font-semibold">Recent Activity</h1>
