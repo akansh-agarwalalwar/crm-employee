@@ -6,7 +6,7 @@ import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import Preview from "./Preview";
 
-function CreateItineary({ onBack }) {
+function CreateItineary() {
   const [activities, setActivities] = useState([
     { day: 1, activity: "", descriptions: [""] },
   ]);
@@ -97,7 +97,7 @@ function CreateItineary({ onBack }) {
         </div>
       </div>
       <div className="px-20 mt-4 w-full">
-        <div className="flex items-center gap-2 cursor-pointer" onClick={onBack}>
+        <div className="flex items-center gap-2">
           <FaRegArrowAltCircleLeft size={40} />
           <div className="">
             <p className="font-bold text-2xl">Create Itineary</p>
