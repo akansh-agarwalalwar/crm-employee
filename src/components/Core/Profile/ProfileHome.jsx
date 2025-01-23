@@ -10,7 +10,7 @@ function ProfileHome() {
   return (
     <div className="flex flex-col items-center h-full gap-10 w-full overflow-y-auto scrollbar-hide bg-[#EEF5FF]">
       <div className="flex flex-row gap-8 justify-center border-gray-200 pb-4 mt-6">
-        <div
+        {/* <div
           className={`flex flex-row gap-3 items-center cursor-pointer transition-all duration-300 ${
             tab === "profile"
               ? "text-blue-500 border-blue-500 border-b-2"
@@ -31,7 +31,7 @@ function ProfileHome() {
         >
           <ImLeaf size={24} />
           <span className="mt-2 text-sm font-semibold">Incentives</span>
-        </div>
+        </div> */}
       </div>
       <div className="w-full max-w-7xl">
         {tab === "profile" && <Dashboard />} 

@@ -20,7 +20,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Dashboard />}>
           <Route index element={<HomeDashboard />} />
-          {/* <Route path="dashboard" element={<HomeDashboard />} /> */}
           <Route path="chats" element={<Home />} />
           <Route path="broadcast" element={<BroadcastHome />} />
           <Route path="automation" element={<AutomationHome />} />

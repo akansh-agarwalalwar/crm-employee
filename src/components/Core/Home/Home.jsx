@@ -11,7 +11,7 @@ function Home() {
   });
 
   return (
-    <div className="flex flex-row h-[90vh]">
+    <div className="flex flex-col md:flex-row h-[90vh]">
       <SideBar setSelectedChat={setSelectedChat} />
       <ChatSection key={selectedChat.phoneNumber} selectedChat={selectedChat} />
       <RightSideBar />
