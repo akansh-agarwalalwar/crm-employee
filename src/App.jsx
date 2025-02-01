@@ -1,5 +1,5 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Route, Routes, Navigate, Outlet } from "react-router-dom";
 import Dashboard from "./Screens/Dashboard";
 import Home from "./components/Core/Home/Home";
 import Login from "./components/Auth/Login";
@@ -13,12 +13,23 @@ import ContactHome from "./components/Core/Contacts/ContactHome";
 import Itineary from "./components/Core/Itineary/Itineary";
 import HomeDashboard from "./Screens/HomeDashboard";
 import Invoice from "./components/Core/Invoice/Invoice";
+import { useSelector, useDispatch } from "react-redux";
+import { clearUser } from "./Redux/UserSlice";
 
 function App() {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.profile);
+
+  useEffect(() => {
+    if (!user) {
+      dispatch(clearUser());
+    }
+  }, [user, dispatch]);
+
   return (
     <div className="bg-[#F5F5F5] overflow-hidden h-dvh w-full">
       <Routes>
-        <Route path="/" element={<Dashboard />}>
+        <Route path="/" element={user ? <Dashboard /> : <Navigate to="/login" replace />}>
           <Route index element={<HomeDashboard />} />
           <Route path="chats" element={<Home />} />
           <Route path="broadcast" element={<BroadcastHome />} />

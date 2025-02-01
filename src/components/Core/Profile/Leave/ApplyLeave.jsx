@@ -1,22 +1,36 @@
 import React, { useState } from "react";
 import { IoBookSharp } from "react-icons/io5";
 import ThumbUp from "../../../../assets/thumbsup.svg";
+import axios from "axios";
 
 function ApplyLeave() {
   const [showPopup, setShowPopup] = useState(false);
   const [formData, setFormData] = useState({
     leaveType: "",
     startDate: "",
-    endDate: "",
     duration: "",
-    resumptionDate: "",
     reason: "",
     handoverDocument: null,
-    reliefOfficer: "",
   });
 
-  const handleSubmit = () => {
-    setShowPopup(true);
+  const handleSubmit = async () => {
+    const employeeID = "12345"; // Replace with actual employee ID
+    const data = new FormData();
+    data.append("employeeID", employeeID);
+    data.append("leaveType", formData.leaveType);
+    data.append("startDate", formData.startDate);
+    data.append("duration", formData.duration);
+    data.append("reason", formData.reason);
+    if (formData.handoverDocument) {
+      data.append("handoverDocument", formData.handoverDocument);
+    }
+
+    try {
+      await axios.post("http://localhost:4000/api/employee/apply-leave", data);
+      setShowPopup(true);
+    } catch (error) {
+      console.error("Error submitting leave application:", error);
+    }
   };
 
   const handleClose = () => {
@@ -27,12 +41,9 @@ function ApplyLeave() {
     setFormData({
       leaveType: "",
       startDate: "",
-      endDate: "",
       duration: "",
-      resumptionDate: "",
       reason: "",
       handoverDocument: null,
-      reliefOfficer: "",
     });
   };
 
@@ -45,7 +56,7 @@ function ApplyLeave() {
   };
 
   return (
-    <div className="w-full relative h-screen flex flex-col justify-center items-center px-10 bg-[#E3EDF9] overflow-y-auto scrollbar-hide pt-24">
+    <div className="w-full relative h-screen flex flex-col justify-center items-center px-10 bg-[#E3EDF9] overflow-y-auto scrollbar-hide">
       {showPopup && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 ">
           <div className="bg-white p-6 rounded-lg shadow-md text-center w-[30%] text-[#03346E]">
@@ -105,18 +116,6 @@ function ApplyLeave() {
                 />
               </div>
               <div className="flex flex-col gap-2 w-1/2">
-                <label className="font-medium text-gray-700">End Date</label>
-                <input
-                  type="date"
-                  name="endDate"
-                  className="p-2 bg-[#E3EDF9] rounded-md"
-                  value={formData.endDate}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-            <div className="flex flex-row gap-4">
-              <div className="flex flex-col gap-2 w-1/2">
                 <label className="font-medium text-gray-700">Duration</label>
                 <input
                   type="number"
@@ -124,18 +123,6 @@ function ApplyLeave() {
                   placeholder="Number of Days"
                   className="p-2 bg-[#E3EDF9] rounded-md"
                   value={formData.duration}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="flex flex-col gap-2 w-1/2">
-                <label className="font-medium text-gray-700">
-                  Resumption Date
-                </label>
-                <input
-                  type="date"
-                  name="resumptionDate"
-                  className="p-2 bg-[#E3EDF9] rounded-md"
-                  value={formData.resumptionDate}
                   onChange={handleChange}
                 />
               </div>
@@ -161,22 +148,6 @@ function ApplyLeave() {
                 className="p-2 bg-[#E3EDF9] rounded-md"
                 onChange={handleChange}
               />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="font-medium text-gray-700">
-                Choose Relief Officer
-              </label>
-              <select
-                name="reliefOfficer"
-                className="p-2 bg-[#E3EDF9] rounded-md"
-                value={formData.reliefOfficer}
-                onChange={handleChange}
-              >
-                <option value="">Select an option</option>
-                <option value="1">Option 1</option>
-                <option value="2">Option 2</option>
-                <option value="3">Option 3</option>
-              </select>
             </div>
             <div className="flex flex-row gap-4 mt-4">
               <button

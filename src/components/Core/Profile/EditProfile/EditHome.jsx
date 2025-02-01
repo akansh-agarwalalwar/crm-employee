@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PersonalDetails from "./PersonalDetails";
 import ContactDetails from "./ContactDetails";
 import EducationQuali from "./EducationQuali";
@@ -7,6 +8,7 @@ import Idcard from "./idcard";
 
 function EditHome() {
   const [activeTab, setActiveTab] = useState("Personal Details");
+  const navigate = useNavigate();
   const tabs = [
     {
       name: "Personal Details",
@@ -36,8 +38,28 @@ function EditHome() {
     <div className="relative h-screen bg-[#EEF5FF]">
       <div className="px-20 mt-5">
         <div className="w-full flex bg-white p-4 rounded-md">
-          <p className="font-semibold ">
-            Dashboard &gt; Profile &gt; Edit Profile &gt; {activeTab}
+          <p className="font-semibold">
+            <span
+              className="cursor-pointer hover:underline"
+              onClick={() => navigate("/")}
+            >
+              Dashboard
+            </span>{" "}
+            &gt;{" "}
+            <span
+              className="cursor-pointer hover:underline"
+              onClick={() => navigate("/profile")}
+            >
+              Profile
+            </span>{" "}
+            &gt;
+            <span
+              className="cursor-pointer hover:underline"
+              onClick={() => navigate("/profile/edit-profile")}
+            >
+              {" "}
+              Edit Profile &gt; {activeTab}
+            </span>
           </p>
         </div>
         <div className="w-full flex flex-row gap-10">

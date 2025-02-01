@@ -32,7 +32,7 @@ function Dashboard() {
   return (
     <div className="w-full h-full relative">
       <div
-        className="w-full h-32 bg-gradient-to-r from-blue-500 to-violet-400 flex items-center justify-between px-4 md:px-8 shadow-md rounded-md"
+        className="w-full h-32 bg-gradient-to-r from-blue-500 to-violet-400 flex items-center justify-between px-2 md:px-8 shadow-md rounded-md"
         style={{
           background: "linear-gradient(110deg, #193288 27%, #060C22 72%)",
         }}
@@ -50,10 +50,10 @@ function Dashboard() {
             </h2>
           </div>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center mr-28">
           <button
             onClick={handleEdit}
-            className="bg-[#FFC20E] hover:bg-yellow-500 text-black font-semibold py-2 px-8 md:px-16 rounded-md shadow-lg transition-all duration-300"
+            className="bg-[#FFC20E] text-black font-semibold py-2 px-8 md:px-16 rounded-md shadow-lg"
           >
             Edit Profile
           </button>
